@@ -92,13 +92,32 @@ header{
 }
 .icon{
   width:96px;
-  aspect-ratio: 1 / 1;
-  height:auto;
+  height:96px;
+
+  min-width:96px;
+  min-height:96px;
+  max-width:96px;
+  max-height:96px;
+
+  aspect-ratio:1 / 1;
+  flex-shrink:0;
 
   border-radius:10px;
   background-size:cover;
   background-position:center;
+  background-repeat:no-repeat;
   border:1px solid rgba(255,255,255,0.04);
+}
+@media (max-width:700px){
+  .icon{
+    width:72px;
+    height:72px;
+
+    min-width:72px;
+    min-height:72px;
+    max-width:72px;
+    max-height:72px;
+  }
 }
 .meta h3{
   margin:0 0 6px;
@@ -147,7 +166,7 @@ footer{
 <main class="wrap">
 
   <div class="request-wrap">
-    <a class="request-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeFDtpKbHJILrCE8K8IaJBfs2KlspTkXaSXRc2jcW-ynBLyMw/viewform?usp=header">Request a Service</a>
+    <a class="request-btn" href="https://example.com">Request a Service</a>
   </div>
 
   <section class="projects">
