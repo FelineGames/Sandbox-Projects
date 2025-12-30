@@ -101,6 +101,32 @@
   .pixel-grid{width:100%;height:6px;background:
     linear-gradient(90deg,#0000 0 10px, rgba(255,255,255,0.02) 10px 11px) repeat-x;
     margin-top:10px;border-radius:2px;opacity:0.7}
+.tabs{
+  display:flex;
+  gap:10px;
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+
+.tab{
+  padding:8px 14px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.02);
+  color:var(--muted);
+  cursor:pointer;
+  font-size:13px;
+}
+
+.tab:hover{
+  background:rgba(255,255,255,0.05);
+}
+
+.tab.active{
+  color:var(--accent);
+  border-color:rgba(140,224,255,0.25);
+  background:linear-gradient(90deg,#0d6efd11,#8ce0ff11);
+}
 </style>
 </head>
 <body>
@@ -144,8 +170,14 @@
     "
   >
 </div>
+<div class="tabs">
+  <button class="tab active" data-tab="all">All</button>
+  <button class="tab" data-tab="minecraft">Minecraft</button>
+  <button class="tab" data-tab="cubyz">Cubyz</button>
+  <button class="tab" data-tab="bloxd">Bloxd</button>
+</div>
 
-<p class="muted">  Author: NotSaino | Last Updated: 27-12-2025</p>
+<p class="muted">  Author: NotSaino | Last Updated: 30-12-2025</p>
       <div class="pixel-grid"></div>
     </div>
   </section>
@@ -153,7 +185,7 @@
   <section id="projects" class="projects">
 
           <!-- Bloxd Re-imagined (Not Standalone) -->
-    <article class="card bloxd_reimagined">
+    <article class="card bloxd_reimagined" data-category="bloxd">
       <div class="thumb" style="background-image:url('./icons/main/bloxd_reimagined.png');"></div>
       <div class="meta">
         <h3>Bloxd Re-imagined</h3>
@@ -165,7 +197,7 @@
     </article>
     
         <!-- Cubyz Reworked -->
-    <article class="card cubyz_reworked">
+    <article class="card cubyz_reworked" data-category="cubyz">
       <div class="thumb" style="background-image:url('./icons/main/cubyz_reworked.png');"></div>
       <div class="meta">
         <h3>Cubyz Reworked</h3>
@@ -177,7 +209,7 @@
     </article>
     
       <!-- Textures Conversion Engine -->
-    <article class="card conversion_engine">
+    <article class="card conversion_engine" data-category="bloxd">
       <div class="thumb" style="background-image:url('./icons/main/conversion_engine.png');"></div>
       <div class="meta">
         <h3>Textures Conversion Engine</h3>
@@ -189,7 +221,7 @@
     </article>
     
     <!-- Skin Persona -->
-    <article class="card skin_persona">
+    <article class="card skin_persona" data-category="minecraft">
       <div class="thumb" style="background-image:url('./icons/main/skin_persona.png');"></div>
       <div class="meta">
         <h3>Skin Persona V2.1</h3>
@@ -205,21 +237,21 @@
     </article>
 
     <!-- Revamp -->
-    <article class="card revamp">
+    <article class="card revamp" data-category="minecraft">
       <div class="thumb" style="background-image:url('./icons/main/revamp.png');"></div>
       <div class="meta">
         <h3>Minecraft Revamp [v2.0.3]</h3>
         <p>Vanilla Edit 16x Pack For Minecraft Bedrock Edition (Original)</p>
         <div class="links">
-          <a class="link-btn" href="https://drive.google.com/file/d/1mPpNQYFQVIsgXVyHY2Gqxitg12Jy51ee/view?usp=drivesdk" target="_blank">Learn More</a>
-          <a class="link-btn" href="https://drive.google.com/file/d/1ucySdDKv6FURApM_HH-5uu9G3cQO6WFU/view?usp=drivesdk" target="_blank">Download</a>
+          <a class="link-btn" href="https://drive.google.com/file/d/1qZcss1lNc-dJA0US1afVR2mw8YbEWl-i/view?usp=drive_link" target="_blank">Learn More</a>
+          <a class="link-btn" href="https://drive.google.com/file/d/1ucySdDKv6FURApM_HH-5uu9G3cQO6WFU/view?pli=1" target="_blank">Download</a>
           <a class="link-btn" href="https://drive.google.com/drive/folders/1KNkNlnDMWrAB21ejKd76IBIt455i4uZu?usp=drive_link" target="_blank">Archives</a>
         </div>
       </div>
     </article>
 
     <!-- Reworked -->
-    <article class="card reworked">
+    <article class="card reworked" data-category="minecraft">
       <div class="thumb" style="background-image:url('./icons/main/reworked.png');"></div>
       <div class="meta">
         <h3>Minecraft Reworked</h3>
@@ -240,7 +272,7 @@
     </article>
 
     <!-- BMC Specials -->
-    <article class="card mc_specials">
+    <article class="card mc_specials" data-category="minecraft">
       <div class="thumb" style="background-image:url('./icons/main/mc_specials.png');"></div>
       <div class="meta">
         <h3>Better Minecraft (Special Edition)</h3>
@@ -265,37 +297,43 @@
 </footer>
 <script>
 document.addEventListener("click", (e) => {
-  const dropdowns = document.querySelectorAll(".dropdown");
-  dropdowns.forEach(dd => {
-    if (dd.contains(e.target)) {
-      dd.classList.toggle("show");
-    } else {
-      dd.classList.remove("show");
-    }
+  document.querySelectorAll(".dropdown").forEach(dd => {
+    dd.classList.toggle("show", dd.contains(e.target));
   });
 });
-  const searchInput = document.getElementById("searchInput");
-  const cards = document.querySelectorAll(".card");
 
-  searchInput.addEventListener("input", () => {
-    const text = searchInput.value.toLowerCase();
+const searchInput = document.getElementById("searchInput");
+const cards = document.querySelectorAll(".card");
+const tabs = document.querySelectorAll(".tab");
 
-    cards.forEach(card => {
-      const title = card.querySelector("h3").textContent.toLowerCase();
-      const desc = card.querySelector("p").textContent.toLowerCase();
+let activeCategory = "all";
 
-      if (title.includes(text) || desc.includes(text)) {
-        card.style.display = "flex";
-      } else {
-        card.style.display = "none";
-      }
-    });
+function filterCards(){
+  const text = searchInput.value.toLowerCase();
+
+  cards.forEach(card => {
+    const title = card.querySelector("h3").textContent.toLowerCase();
+    const desc = card.querySelector("p").textContent.toLowerCase();
+    const category = card.dataset.category;
+
+    const matchesText = title.includes(text) || desc.includes(text);
+    const matchesTab = activeCategory === "all" || category === activeCategory;
+
+    card.style.display = (matchesText && matchesTab) ? "flex" : "none";
   });
+}
+
+searchInput.addEventListener("input", filterCards);
+
+tabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    tabs.forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    activeCategory = tab.dataset.tab;
+    filterCards();
+  });
+});
 </script>
 
 </body>
 </html>
-
-
-
-
